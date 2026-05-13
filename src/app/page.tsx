@@ -3,6 +3,8 @@ import { createTeamAction } from "./actions";
 import Link from "next/link";
 import { Plus, Users, ChevronRight } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const teams = await getTeams();
 
