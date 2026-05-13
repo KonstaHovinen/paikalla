@@ -1,4 +1,4 @@
-import { getTeamByInviteCode, getSessionById } from "@/lib/db";
+import { getTeamByInviteCode, getSessionById, getPlayersByTeam } from "@/lib/db";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -9,7 +9,11 @@ export default async function PlayerSessionPage({ params }: { params: Promise<{ 
   const team = await getTeamByInviteCode(resolvedParams.code);
   if (!team) notFound();
 
-  const session = await getSessionById(resolvedParams.sessionId);
+  const [session, players] = await Promise.all([
+    getSessionById(resolvedParams.sessionId),
+    getPlayersByTeam(team.id)
+  ]);
+
   if (!session || session.team_id !== team.id) notFound();
 
   return (
@@ -24,6 +28,7 @@ export default async function PlayerSessionPage({ params }: { params: Promise<{ 
         <PlayerInviteForm 
           teamId={team.id} 
           session={session} 
+          players={players}
         />
       </div>
     </main>

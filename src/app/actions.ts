@@ -66,10 +66,10 @@ export async function playerSubmitAttendanceAction(teamId: string, sessionId: st
   // Find or create player
   const { getPlayersByTeam } = await import("@/lib/db");
   const players = await getPlayersByTeam(teamId);
-  let player = players.find(p => p.name.toLowerCase() === playerName.toLowerCase());
+  const player = players.find(p => p.name.toLowerCase() === playerName.toLowerCase());
   
   if (!player) {
-    player = await createPlayer(teamId, playerName);
+    throw new Error("Player not found in roster. Please ask your coach to add you.");
   }
 
   // Update attendance
